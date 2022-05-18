@@ -1,9 +1,9 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "game-gamerecord-ky-service.fullname" . }}
+  name: {{ include "game-gamerecord-ly-service.fullname" . }}
   labels:
-    {{- include "game-gamerecord-ky-service.labels" . | nindent 4 }}
+    {{- include "game-gamerecord-ly-service.labels" . | nindent 4 }}
   annotations:
     reloader.stakater.com/auto: "true"
 spec:
@@ -12,7 +12,7 @@ spec:
   {{- end }}
   selector:
     matchLabels:
-      {{- include "game-gamerecord-ky-service.selectorLabels" . | nindent 6 }}
+      {{- include "game-gamerecord-ly-service.selectorLabels" . | nindent 6 }}
   template:
     metadata:
       {{- with .Values.podAnnotations }}
@@ -20,13 +20,13 @@ spec:
         {{- toYaml . | nindent 8 }}
       {{- end }}
       labels:
-        {{- include "game-gamerecord-ky-service.selectorLabels" . | nindent 8 }}
+        {{- include "game-gamerecord-ly-service.selectorLabels" . | nindent 8 }}
     spec:
       {{- with .Values.imagePullSecrets }}
       imagePullSecrets:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-      serviceAccountName: {{ include "game-gamerecord-ky-service.serviceAccountName" . }}
+      serviceAccountName: {{ include "game-gamerecord-ly-service.serviceAccountName" . }}
       securityContext:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
       containers:
@@ -37,7 +37,7 @@ spec:
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           env:
             - name: OTEL_SERVICE_NAME
-              value: Game-Gamerecord-KY-Service({{ .Release.namespace }})
+              value: Game-Gamerecord-LY-Service({{ .Release.namespace }})
             - name: NODE_IP
               valueFrom:
                 fieldRef:
@@ -130,7 +130,7 @@ spec:
       volumes:
         - name: appsettings
           configMap:
-            name: configmap-{{ include "game-gamerecord-ky-service.fullname" . }}
+            name: configmap-{{ include "game-gamerecord-ly-service.fullname" . }}
         - name: rds-combined-ca-bundle
           secret:
             secretName: rds-combined-ca-bundle

@@ -1,9 +1,9 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ include "game-gamerecord-ky-service.fullname" . }}
+  name: {{ include "game-gamerecord-ly-service.fullname" . }}
   labels:
-    {{- include "game-gamerecord-ky-service.labels" . | nindent 4 }}
+    {{- include "game-gamerecord-ly-service.labels" . | nindent 4 }}
 spec:
   type: {{ .Values.service.type }}
   ports:
@@ -12,4 +12,4 @@ spec:
       protocol: TCP
       name: http
   selector:
-    {{- include "game-gamerecord-ky-service.selectorLabels" . | nindent 4 }}
+    {{- include "game-gamerecord-ly-service.selectorLabels" . | nindent 4 }}

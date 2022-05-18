@@ -1,7 +1,7 @@
 {{/*
 Expand the name of the chart.
 */}}
-{{- define "game-gamerecord-ky-service.name" -}}
+{{- define "game-gamerecord-ly-service.name" -}}
 {{- default .Chart.Name .Values.nameOverride | trunc 63 | trimSuffix "-" }}
 {{- end }}
 
@@ -10,7 +10,7 @@ Create a default fully qualified app name.
 We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
 If release name contains chart name it will be used as a full name.
 */}}
-{{- define "game-gamerecord-ky-service.fullname" -}}
+{{- define "game-gamerecord-ly-service.fullname" -}}
 {{- if .Values.fullnameOverride }}
 {{- .Values.fullnameOverride | trunc 63 | trimSuffix "-" }}
 {{- else }}
@@ -26,16 +26,16 @@ If release name contains chart name it will be used as a full name.
 {{/*
 Create chart name and version as used by the chart label.
 */}}
-{{- define "game-gamerecord-ky-service.chart" -}}
+{{- define "game-gamerecord-ly-service.chart" -}}
 {{- printf "%s-%s" .Chart.Name .Chart.Version | replace "+" "_" | trunc 63 | trimSuffix "-" }}
 {{- end }}
 
 {{/*
 Common labels
 */}}
-{{- define "game-gamerecord-ky-service.labels" -}}
-helm.sh/chart: {{ include "game-gamerecord-ky-service.chart" . }}
-{{ include "game-gamerecord-ky-service.selectorLabels" . }}
+{{- define "game-gamerecord-ly-service.labels" -}}
+helm.sh/chart: {{ include "game-gamerecord-ly-service.chart" . }}
+{{ include "game-gamerecord-ly-service.selectorLabels" . }}
 {{- if .Chart.AppVersion }}
 app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 {{- end }}
@@ -45,9 +45,9 @@ app.kubernetes.io/managed-by: {{ .Release.Service }}
 {{/*
 Selector labels
 */}}
-{{- define "game-gamerecord-ky-service.selectorLabels" -}}
-app.kubernetes.io/name: {{ include "game-gamerecord-ky-service.name" . }}
-app: {{ include "game-gamerecord-ky-service.name" . }}
+{{- define "game-gamerecord-ly-service.selectorLabels" -}}
+app.kubernetes.io/name: {{ include "game-gamerecord-ly-service.name" . }}
+app: {{ include "game-gamerecord-ly-service.name" . }}
 app.kubernetes.io/instance: {{ .Release.Name }}
 tgs.kind: game
 tgs.game.kind: gamerecord
@@ -56,9 +56,9 @@ tgs.game.kind: gamerecord
 {{/*
 Create the name of the service account to use
 */}}
-{{- define "game-gamerecord-ky-service.serviceAccountName" -}}
+{{- define "game-gamerecord-ly-service.serviceAccountName" -}}
 {{- if .Values.serviceAccount.create }}
-{{- default (include "game-gamerecord-ky-service.fullname" .) .Values.serviceAccount.name }}
+{{- default (include "game-gamerecord-ly-service.fullname" .) .Values.serviceAccount.name }}
 {{- else }}
 {{- default "default" .Values.serviceAccount.name }}
 {{- end }}

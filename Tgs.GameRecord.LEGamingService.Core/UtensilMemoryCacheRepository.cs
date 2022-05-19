@@ -5,17 +5,17 @@ using Tgs.GameProviders.QueryServer.Models;
 
 namespace Tgs.GameRecord.LEGamingService.Core
 {
-    internal class LEGamingMemoryCacheRepository : ILEGaming
+    internal class UtensilMemoryCacheRepository : IUtensil
     {
         private readonly TimeSpan _absoluteExpirationRelativeToNow;
         private readonly GameRecordInfoOptions _gameRecordInfo;
-        private readonly ILEGaming _lEGaming;
+        private readonly IUtensil _lEGaming;
         private readonly IMemoryCache _memoryCache;
 
-        public LEGamingMemoryCacheRepository(
+        public UtensilMemoryCacheRepository(
             TimeSpan absoluteExpirationRelativeToNow,
             IOptions<GameRecordInfoOptions> options,
-            ILEGaming LEGaming,
+            IUtensil LEGaming,
             IMemoryCache memoryCache)
         {
             _absoluteExpirationRelativeToNow = absoluteExpirationRelativeToNow;

@@ -3,7 +3,7 @@ using Tgs.GameProviders.QueryServer.Models;
 
 namespace Tgs.GameRecord.LEGamingService.Core
 {
-    public interface ILEGaming
+    public interface IUtensil
     {
         ValueTask<Guid?> BrandGetGameProviderConfigurationIdAsync(Guid brandId, Guid gameProviderId);
 

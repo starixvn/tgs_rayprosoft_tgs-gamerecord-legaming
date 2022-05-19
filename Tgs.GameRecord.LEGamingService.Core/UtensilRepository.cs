@@ -5,12 +5,12 @@ using Tgs.GameProviders.QueryServer.Models;
 
 namespace Tgs.GameRecord.LEGamingService.Core
 {
-    internal class LEGamingRepository : ILEGaming
+    internal class UtensilRepository : IUtensil
     {
         private readonly IGameProvidersQueryServerClient _client;
         private readonly GameRecordInfoOptions _gameRecordInfo;
 
-        public LEGamingRepository(
+        public UtensilRepository(
             IGameProvidersQueryServerClient client,
             IOptions<GameRecordInfoOptions> options)
         {

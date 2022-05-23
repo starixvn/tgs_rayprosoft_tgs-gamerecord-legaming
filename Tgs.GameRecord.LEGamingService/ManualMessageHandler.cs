@@ -31,7 +31,7 @@ namespace Tgs.GameRecord.LEGamingService
             var response = new ManualMessageResponse()
             {
                 Success = result.Success,
-                LastGameRecorTime = result.LastGameRecorTime,
+                LastGameRecordTime = result.LastGameRecordTime,
                 SuccessCount = result.SuccessCount,
                 FailCount = result.FailCount,
                 Count = result.Count

@@ -25,7 +25,7 @@ namespace Tgs.GameRecord.LEGamingService.Controllers
             return new GameRecordResultViewModel()
             {
                 Success = result.Success,
-                LastGameRecorTime = result.LastGameRecorTime,
+                LastGameRecordTime = result.LastGameRecordTime,
                 SuccessCount = result.SuccessCount,
                 FailCount = result.FailCount,
                 Count = result.Count,

@@ -9,7 +9,7 @@ namespace Tgs.GameRecord.LEGamingService.Core.JobWorkerServices
     internal class JobWorkerCommandService : ICommandService<JobWorkerCommand>
     {
         private readonly GameRecordInfoOptions _gameRecordInfo;
-        private readonly IGameRecordSchedule _gameRecordScheduleService;
+        private readonly IGameRecordSchedule _gameRecordSchedule;
         private readonly IGetService<GameRecordQuery, GameRecordResult> _getService;
         private readonly ILogger<JobWorkerCommandService> _logger;
         private readonly ISystemClock _systemClock;
@@ -18,14 +18,14 @@ namespace Tgs.GameRecord.LEGamingService.Core.JobWorkerServices
         public JobWorkerCommandService(
             IOptions<GameRecordInfoOptions> options,
             IUtensil utensil,
-            IGameRecordSchedule gameRecordScheduleService,
+            IGameRecordSchedule gameRecordSchedule,
             ISystemClock systemClock,
             ILogger<JobWorkerCommandService> logger,
             IGetService<GameRecordQuery, GameRecordResult> getService)
         {
             _gameRecordInfo = options.Value;
             _utensil = utensil ?? throw new ArgumentNullException(nameof(utensil));
-            _gameRecordScheduleService = gameRecordScheduleService ?? throw new ArgumentNullException(nameof(gameRecordScheduleService));
+            _gameRecordSchedule = gameRecordSchedule ?? throw new ArgumentNullException(nameof(gameRecordSchedule));
             _systemClock = systemClock ?? throw new ArgumentNullException(nameof(systemClock));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
             _getService = getService ?? throw new ArgumentNullException(nameof(getService));
@@ -54,22 +54,22 @@ namespace Tgs.GameRecord.LEGamingService.Core.JobWorkerServices
                             CurrencyCode = agent.CurrencyCode,
                         };
 
-                        var gameProviderSchedule =
-                            await _gameRecordScheduleService.GetAsync(
+                        var schedule =
+                            await _gameRecordSchedule.GetAsync(
                                 brand.BrandCode,
                                 agent.AgentId,
                                 agent.CurrencyCode,
                                 cancellationToken).ConfigureAwait(false)
-                                ?? await _gameRecordScheduleService.InitAsync(
+                                ?? await _gameRecordSchedule.InitAsync(
                                     gameProviderId,
                                     brand.BrandCode,
                                     agent.AgentId,
                                     agent.CurrencyCode,
                                     cancellationToken).ConfigureAwait(false);
 
-                        while (gameProviderSchedule != null)
+                        while (schedule != null)
                         {
-                            var config = _gameRecordScheduleService.GetConfig(gameProviderSchedule);
+                            var config = _gameRecordSchedule.GetConfig(schedule);
                             if (config.EndTime >= sysTime)
                             {
                                 break;
@@ -84,7 +84,7 @@ namespace Tgs.GameRecord.LEGamingService.Core.JobWorkerServices
                             }, cancellationToken).ConfigureAwait(false);
                             if (result.Success)
                             {
-                                gameProviderSchedule = await _gameRecordScheduleService.UpdateAsync(gameProviderSchedule, result.LastGameRecordTime, sysTime, cancellationToken).ConfigureAwait(false);
+                                schedule = await _gameRecordSchedule.UpdateAsync(schedule, result.LastGameRecordTime, sysTime, cancellationToken).ConfigureAwait(false);
                             }
                             else
                             {

@@ -1,7 +1,6 @@
-﻿namespace Tgs.GameRecord.LEGamingService.Core
+﻿namespace Tgs.GameRecord.LEGamingService.Core;
+
+public interface ISystemClock
 {
-    public interface ISystemClock
-    {
-        DateTimeOffset CurrentTime { get; }
-    }
+    DateTimeOffset CurrentTime { get; }
 }

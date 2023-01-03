@@ -1,18 +1,27 @@
-﻿using Tgs.GameProviders.Domains.SettingConfiguration;
-using Tgs.GameProviders.QueryServer.Models;
+﻿using Tgs.GameCommand.Common;
+using Tgs.GameProviders.Domains.SettingConfiguration;
 
-namespace Tgs.GameRecord.LEGamingService.Core
+namespace Tgs.GameRecord.LEGamingService.Core;
+
+public interface IUtensil
 {
-    public interface IUtensil
-    {
-        ValueTask<Guid?> BrandGetGameProviderConfigurationIdAsync(Guid brandId, Guid gameProviderId);
+    ValueTask<Guid?> BrandGetGameProviderConfigurationIdAsync(
+        Guid brandId,
+        Guid gameProviderId,
+        CancellationToken cancellationToken = default);
 
-        ValueTask<int?> GetGameIdAsync(Guid gameProviderId, string gameExternalId);
+    ValueTask<int?> GetGameIdAsync(
+        Guid gameProviderId,
+        string gameExternalId,
+        CancellationToken cancellationToken = default);
 
-        ValueTask<Guid> GetGameProviderIdAsync();
+    ValueTask<Guid> GetGameProviderIdAsync(
+        CancellationToken cancellationToken = default);
 
-        ValueTask<PlayerModel?> GetPlayerAsync(string playerCode);
+    ValueTask<PlayerInfo?> GetPlayerAsync(
+        string playerCode,
+        CancellationToken cancellationToken = default);
 
-        ValueTask<LYConfiguration> GetSettingConfigurationAsync();
-    }
+    ValueTask<LYConfiguration> GetSettingConfigurationAsync(
+        CancellationToken cancellationToken = default);
 }

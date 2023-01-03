@@ -6,16 +6,16 @@ metadata:
 data:
   appsettings.json: |
     {
-      "GameRecord": {
-        "GameRecordSchedulesBaseUrl": "http://game-gamerecordschedules",
-        "GameProvidersQueryServerBaseUrl": "http://game-gameprovider-queryserver",
-        "GameProvidersBaseUrl": "http://game-gameproviders"
-      },
       "GameRecordInfo": {
         "GameProviderCode": "LY",
         "GameProviderConfiguration": "LYConfiguration",
         "IntervalMinuteMax": 40,
         "IntervalMinute": 5
+      },
+      "GameRecord": {
+        "GameRecordSchedulesBaseUrl": "http://game-gamerecordschedules:9090/",
+        "GameCommandClientBaseUrl": "http://game-gamecommand/",
+        "GameProvidersBaseUrl": "http://game-gameproviders/"
       }
     }
   monitor.settings.json: |

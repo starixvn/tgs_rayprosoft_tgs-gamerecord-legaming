@@ -1,4 +1,4 @@
-using System.Text.Json.Serialization;
+﻿using System.Text.Json.Serialization;
 using Microsoft.Extensions.Options;
 using OpenTelemetry.Exporter;
 using OpenTelemetry.Instrumentation.AspNetCore;
@@ -52,7 +52,7 @@ builder.Services.AddGameRecordCore((options, sp) =>
 (options, sp) =>
 {
     var configuration = sp.GetRequiredService<IConfiguration>();
-    options.BaseUrl = configuration.GetValue<Uri>("GameRecord:GameProvidersQueryServerBaseUrl");
+    options.BaseUrl = configuration.GetValue<Uri>("GameRecord:GameCommandClientBaseUrl");
 },
 (options, sp) =>
 {
@@ -124,30 +124,24 @@ builder.Services
                 || !httpContext.Request.Path.StartsWithSegments("/swagger")
                 && !httpContext.Request.Path.StartsWithSegments("/healthz")
                 && !httpContext.Request.Path.StartsWithSegments("/profiler/")
-                && !new[] { "html", "ico", "png", "jpg" }.Any(
-                    ext => httpContext.Request.Path.Value.EndsWith($".{ext}"));
+                && !httpContext.Request.Path.StartsWithSegments("/hangfire")
+                && !httpContext.Request.Path.StartsWithSegments("/metrics")
+                   && !new[] { "html", "ico", "png", "jpg" }.Any(
+                       ext => httpContext.Request.Path.Value.EndsWith($".{ext}"));
         };
     });
 
-builder.Services
-    .AddHealthChecks();
+builder.Services.AddHealthChecks();
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-}
-
-_ = app.UseSwagger();
-_ = app.UseSwaggerUI();
-
-_ = app.UseAuthorization();
-
-_ = app.MapControllers();
-
+app.MapControllers();
 app.MapProfileViewer();
+app.MapSwagger();
+app.UseSwaggerUI();
 
 app.MapHealthChecks("/healthz");
+
+_ = app.UseGameRecordRegister();
 
 app.Run();

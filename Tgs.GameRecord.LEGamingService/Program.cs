@@ -1,12 +1,13 @@
 ﻿using System.Text.Json.Serialization;
 using Microsoft.Extensions.Options;
+using MongoDB.Messaging;
 using OpenTelemetry.Exporter;
 using OpenTelemetry.Instrumentation.AspNetCore;
 using OpenTelemetry.Resources;
 using OpenTelemetry.Trace;
 using Tgs.GameRecord.LEGamingService;
+using Tgs.GameRecord.LEGamingService.Core;
 using Tgs.MessageQueue.MongoDB.Configuration;
-using MongoMessageQueue = MongoDB.Messaging.MessageQueue;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -44,39 +45,47 @@ builder.Services.AddSwaggerGen();
 //
 builder.Services.AddMemoryCache();
 
-builder.Services.AddGameRecordCore((options, sp) =>
-{
-    var configuration = sp.GetRequiredService<IConfiguration>();
-    configuration.GetSection("GameRecordInfo").Bind(options);
-},
-(options, sp) =>
-{
-    var configuration = sp.GetRequiredService<IConfiguration>();
-    options.BaseUrl = configuration.GetValue<Uri>("GameRecord:GameCommandClientBaseUrl");
-},
-(options, sp) =>
-{
-    var configuration = sp.GetRequiredService<IConfiguration>();
-    options.BaseUrl = configuration.GetValue<Uri>("GameRecord:GameRecordSchedulesBaseUrl");
-},
-(options, sp) =>
-{
-    var configuration = sp.GetRequiredService<IConfiguration>();
-    options.BaseUrl = configuration.GetValue<Uri>("GameRecord:GameProvidersBaseUrl");
-});
+builder.Services
+    .AddGameRecordCore((options, sp) =>
+    {
+        var configuration = sp.GetRequiredService<IConfiguration>();
+        configuration.GetSection("GameRecordInfo").Bind(options);
+    },
+    (options, sp) =>
+    {
+        var configuration = sp.GetRequiredService<IConfiguration>();
+        configuration.GetSection("MongoSetting").Bind(options);
+    },
+    (options, sp) =>
+    {
+        var configuration = sp.GetRequiredService<IConfiguration>();
+        options.BaseUrl = configuration.GetValue<Uri>("GameRecord:GameCommandClientBaseUrl");
+    },
+    (options, sp) =>
+    {
+        var configuration = sp.GetRequiredService<IConfiguration>();
+        options.BaseUrl = configuration.GetValue<Uri>("GameRecord:GameRecordSchedulesBaseUrl");
+    },
+    (options, sp) =>
+    {
+        var configuration = sp.GetRequiredService<IConfiguration>();
+        options.BaseUrl = configuration.GetValue<Uri>("GameRecord:GameProvidersBaseUrl");
+    });
+
+var mongoSetting = builder.Configuration.GetSection("MongoSetting").Get<MongoSettingOptions>();
 
 builder.Services
     .AddMessageQueue()
     .AddMongoMessageQueue(config =>
     {
         _ = config
-        .DefineMessageQueue(
-            "gp.gamerecord.database",
-            sp => new MongoMessageQueueBuilderOptions
-            {
-                MessageQueue = MongoMessageQueue.Default,
-                ConnectionString = sp.GetRequiredService<IConfiguration>().GetConnectionString("MongoMessaging")!
-            });
+            .DefineMessageQueue(
+                mongoSetting.ManagerName,
+                sp => new MongoMessageQueueBuilderOptions
+                {
+                    ConnectionString = sp.GetRequiredService<IConfiguration>().GetConnectionString("MongoMessaging")!,
+                    MessageQueue = MessageQueue.Default
+                });
     })
      .AddNatsMessageQueue(natsConfig =>
      {
@@ -90,7 +99,7 @@ builder.Services
          .AddProcessor<ManualMessageHandler>("gp.gamerecord.manual.ly", "gp.gamerecord.manual");
      })
     .ClearAllExchanges()
-    .AddMongoGlobPatternExchange("tgs.gp.gamerecord.database.round.ly", "gp.gamerecord.database", "tgs.gp.gamerecord.database.round.ly");
+    .AddMongoGlobPatternExchange(mongoSetting.GlobPattern, mongoSetting.ManagerName, mongoSetting.QueueName);
 
 builder.Services
      .AddSingleton<IConfigureOptions<OtlpExporterOptions>>(
@@ -131,14 +140,19 @@ builder.Services
         };
     });
 
-builder.Services.AddHealthChecks();
+builder.Services
+    .AddHealthChecks();
 
 var app = builder.Build();
 
-app.MapControllers();
+_ = app.UseSwagger();
+_ = app.UseSwaggerUI();
+
+_ = app.UseAuthorization();
+
+_ = app.MapControllers();
+
 app.MapProfileViewer();
-app.MapSwagger();
-app.UseSwaggerUI();
 
 app.MapHealthChecks("/healthz");
 

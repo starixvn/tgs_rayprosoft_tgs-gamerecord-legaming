@@ -1,4 +1,4 @@
-apiVersion: v1
+﻿apiVersion: v1
 kind: ConfigMap
 metadata:
   name: configmap-{{ include "game-gamerecord-ly-service.name" . }}
@@ -9,8 +9,9 @@ data:
       "GameRecordInfo": {
         "GameProviderCode": "LY",
         "GameProviderConfiguration": "LYConfiguration",
-        "IntervalMinuteMax": 40,
-        "IntervalMinute": 5
+        "IntervalMinutes": 5,
+        "IntervalMinutesMax": 30,
+        "IntervalMinutesMinimum": 3
       },
       "GameRecord": {
         "GameRecordSchedulesBaseUrl": "http://game-gamerecordschedules:9090/",

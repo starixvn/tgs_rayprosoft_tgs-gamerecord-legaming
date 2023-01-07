@@ -5,7 +5,7 @@ namespace Tgs.GameRecord.LEGamingService.Core;
 
 public interface IUtensil
 {
-    ValueTask<Guid?> BrandGetGameProviderConfigurationIdAsync(
+    ValueTask<Guid?> GetBrandGameProviderConfigurationIdAsync(
         Guid brandId,
         Guid gameProviderId,
         CancellationToken cancellationToken = default);

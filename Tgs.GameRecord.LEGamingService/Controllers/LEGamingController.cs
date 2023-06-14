@@ -11,10 +11,10 @@ public class LEGamingController : ControllerBase
 {
     [HttpPost]
     public async ValueTask<GameRecordResultViewModel> GameRecordAsync(
-        [FromServices] IGetService<GameRecordQuery, GameRecordResult> service,
+        [FromServices] IGetService<PullRecordQuery, PullRecordResult> service,
         GameRecordQueryViewModel model)
     {
-        var result = await service.GetAsync(new GameRecordQuery()
+        var result = await service.GetAsync(new PullRecordQuery()
         {
             BrandCode = model.BrandCode,
             CurrencyCode = model.CurrencyCode,
@@ -25,10 +25,7 @@ public class LEGamingController : ControllerBase
         return new GameRecordResultViewModel()
         {
             Success = result.Success,
-            LastGameRecordTime = result.LastGameRecordTime,
-            SuccessCount = result.SuccessCount,
-            FailureCount = result.FailureCount,
-            Count = result.Count,
+            LastGameRecordTime = result.LastGameRecordTime
         };
     }
 }

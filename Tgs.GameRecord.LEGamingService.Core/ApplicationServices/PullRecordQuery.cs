@@ -1,6 +1,6 @@
 ﻿namespace Tgs.GameRecord.LEGamingService.Core.ApplicationServices;
 
-public record GameRecordQuery
+public record PullRecordQuery
 {
     public string BrandCode { get; init; } = default!;
 

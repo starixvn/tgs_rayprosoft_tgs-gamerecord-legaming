@@ -10,7 +10,7 @@ internal class JobWorkerCommandService : ICommandService<JobWorkerCommand>
 {
     private readonly GameRecordInfoOptions _gameRecordInfo;
     private readonly IGameRecordSchedule _gameRecordSchedule;
-    private readonly IGetService<GameRecordQuery, GameRecordResult> _getService;
+    private readonly IGetService<PullRecordQuery, PullRecordResult> _getService;
     private readonly ILogger<JobWorkerCommandService> _logger;
     private readonly ISystemClock _systemClock;
     private readonly IUtensil _utensil;
@@ -21,7 +21,7 @@ internal class JobWorkerCommandService : ICommandService<JobWorkerCommand>
         IGameRecordSchedule gameRecordSchedule,
         ISystemClock systemClock,
         ILogger<JobWorkerCommandService> logger,
-        IGetService<GameRecordQuery, GameRecordResult> getService)
+        IGetService<PullRecordQuery, PullRecordResult> getService)
     {
         _gameRecordInfo = options.Value;
         _utensil = utensil ?? throw new ArgumentNullException(nameof(utensil));
@@ -81,7 +81,7 @@ internal class JobWorkerCommandService : ICommandService<JobWorkerCommand>
                             break;
                         }
 
-                        var result = await _getService.GetAsync(new GameRecordQuery()
+                        var result = await _getService.GetAsync(new PullRecordQuery()
                         {
                             BrandCode = brand.BrandCode,
                             CurrencyCode = agent.CurrencyCode,

@@ -1,4 +1,6 @@
-﻿using System.Text.Json.Serialization;
+﻿using System.Net.Mime;
+using System.Text.Json.Serialization;
+using Microsoft.AspNetCore.Mvc;
 using OpenTelemetry.Instrumentation.AspNetCore;
 using OpenTelemetry.Metrics;
 using OpenTelemetry.Resources;
@@ -29,7 +31,11 @@ builder.Logging
 
 builder.Services
     .AddRouting(options => options.LowercaseUrls = true)
-    .AddControllers()
+    .AddControllers(options =>
+    {
+        options.Filters.Add(new ProducesAttribute(MediaTypeNames.Application.Json));
+        options.Filters.Add(new ConsumesAttribute(MediaTypeNames.Application.Json));
+    })
     .AddJsonOptions(options =>
     {
         options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
@@ -37,9 +43,6 @@ builder.Services
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-
-//
-builder.Services.AddMemoryCache();
 
 builder.Services
     .AddGameRecordCore((options, sp) =>

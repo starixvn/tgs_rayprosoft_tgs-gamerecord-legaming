@@ -23,7 +23,7 @@ public class LEGamingController : ControllerBase
     ///             "apiRecordUrl": "https://wc1-record.kewmn686.com/",
     ///             "deskey": "706EB65DD6E6DF4C",
     ///             "md5key": "3E00054B89B31B7A",
-    ///             "agentId": "200995"
+    ///             "agentId": "200995",
     ///             "startTime": "2023-07-19T15:50:00+08:00",
     ///             "endTime": "2023-07-19T16:00:00+08:00"
     ///         }

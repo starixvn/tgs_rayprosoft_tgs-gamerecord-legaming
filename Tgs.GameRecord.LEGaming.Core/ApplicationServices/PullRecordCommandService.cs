@@ -42,14 +42,14 @@ internal class PullRecordCommandService : ICommandService<PullRecordCommand>
             try
             {
                 await _service
-                .ExecuteAsync(
-                     command: new HandleRecordCommand(gameRecord),
-                     cancellationToken: cancellationToken)
-                .ConfigureAwait(false);
+                    .ExecuteAsync(
+                    command: new HandleRecordCommand(gameRecord),
+                    cancellationToken: cancellationToken)
+                    .ConfigureAwait(false);
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "遊戲紀錄發生例外.({data})", gameRecord);
+                _logger.LogError(ex, "LogOn:{logOn} Message: game record exception.({gameRecord})", DateTime.Now.ToString("o"), gameRecord);
             }
         }
 

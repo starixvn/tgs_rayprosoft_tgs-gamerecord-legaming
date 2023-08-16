@@ -1,68 +1,34 @@
-﻿using System.Text.Json;
-using Tgs.GameRounds.Work.Client;
-using Tgs.GameRounds.Work.Common.Protos;
+﻿using Microsoft.Extensions.Options;
+using Tgs.GameRecord.Handle.Client;
+using Tgs.GameRecord.Handle.Common.Protos;
 using Tgs.ServiceUtility;
 
 namespace Tgs.GameRecord.LEGaming.Core.ApplicationServices;
 
 internal class HandleRecordCommandService : ICommandService<HandleRecordCommand>
 {
-    private readonly IGameRoundsWorkClient _client;
-    private readonly IUtensil _utensil;
+    private readonly IGameRecordHandleClient _client;
+    private readonly GameRecordInfoOptions _gameRecordInfo;
 
     public HandleRecordCommandService(
-        IUtensil utensil,
-        IGameRoundsWorkClient client)
+        IOptions<GameRecordInfoOptions> options,
+        IGameRecordHandleClient client)
     {
-        _utensil = utensil ?? throw new ArgumentNullException(nameof(utensil));
+        _gameRecordInfo = options.Value;
         _client = client ?? throw new ArgumentNullException(nameof(client));
     }
 
     public async ValueTask ExecuteAsync(HandleRecordCommand command, CancellationToken cancellationToken = default)
     {
-        var gameProviderId = await _utensil
-            .GetGameProviderIdAsync(
-                cancellationToken: cancellationToken)
-            .ConfigureAwait(false);
+        var clientStatus = (command.Record.WinLoss.ToDecimal().GetValueOrDefault(0) > 0) ? GameRecordClientStatus.Win : GameRecordClientStatus.Loss;
 
-        var gameProviderCode = _utensil
-            .GetGameProviderCode();
-
-        var playerModel = await _utensil
-            .GetPlayerAsync(
-                playerCode: command.Record.PlayerCode,
-                cancellationToken: cancellationToken)
-            .ConfigureAwait(false);
-        var gameId = await _utensil
-            .GetGameIdAsync(
-            gameProviderId: gameProviderId,
-            gameExternalId: command.Record.ExternalGameId,
-            cancellationToken: cancellationToken)
-            .ConfigureAwait(false);
-
-
-        var gameProviderConfigurationId = await _utensil
-            .GetBrandGameProviderConfigurationIdAsync(
-            brandId: playerModel.BrandId,
-            gameProviderId: gameProviderId,
-            cancellationToken: cancellationToken)
-            .ConfigureAwait(false);
-
-        var clientStatus = (command.Record.WinLoss.ToDecimal().GetValueOrDefault(0) > 0) ? RoundClientStatus.Win : RoundClientStatus.Loss;
-        
         await _client
-            .RoundExchangeRateBiddingAsync(
-            gameProviderId: gameProviderId,
-            gameProviderCode: gameProviderCode,
+            .MessageAsync(
+            gameProviderCode: _gameRecordInfo.GameProviderCode,
             externalRoundId: command.Record.ExternalRoundId,
-            gameId: gameId!,
             externalGameId: command.Record.ExternalGameId,
             playerCode: command.Record.PlayerCode,
-            walletId: playerModel.DefaultWalletId,
-            currencyCode: playerModel.DefaultWalletCurrencyCode,
-            brandId: playerModel.BrandId,
-            gameProviderConfigurationId: gameProviderConfigurationId,
-            status: RoundStatus.Closed,
+            status: GameRecordStatus.Closed,
             clientStatus: clientStatus,
             externalCreatedOn: command.Record.ExternalCreatedOn.ToDateTimeOffset(),
             externalClosedOn: command.Record.ExternalClosedOn.ToDateTimeOffset(),

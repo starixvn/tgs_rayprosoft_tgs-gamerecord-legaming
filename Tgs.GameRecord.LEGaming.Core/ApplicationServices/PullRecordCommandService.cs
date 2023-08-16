@@ -52,6 +52,5 @@ internal class PullRecordCommandService : ICommandService<PullRecordCommand>
                 _logger.LogError(ex, "LogOn:{logOn} Message: game record exception.({gameRecord})", DateTime.Now.ToString("o"), gameRecord);
             }
         }
-
     }
 }

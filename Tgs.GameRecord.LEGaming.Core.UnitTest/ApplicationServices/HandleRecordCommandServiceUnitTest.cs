@@ -47,31 +47,34 @@ public class HandleRecordCommandServiceUnitTest
             gameRecordInfo,
             fakeClient);
 
-        await service
-            .ExecuteAsync(
-            command)
-            .ConfigureAwait(false);
+        await service.ExecuteAsync(command);
 
         await fakeClient
             .Received(1)
             .MessageAsync(
             gameProviderCode: Arg.Is(gameRecordInfo.Value.GameProviderCode),
-            externalRoundId: Arg.Is(command.Record.ExternalRoundId),
-            externalGameId: Arg.Is(command.Record.ExternalGameId.ToString()),
             playerCode: Arg.Is(command.Record.PlayerCode),
-            status: Arg.Is(GameRecordStatus.Closed),
-            clientStatus: Arg.Is(GameRecordClientStatus.Loss),
+            wagerState: Arg.Is(WagerStates.Lose),
+            wagerType: Arg.Is(WagerTypes.Normal),
+            freeGameState: Arg.Is(FreeGameStates.None),
+            gambleState: Arg.Is(GambleStates.None),
+            cashoutState: Arg.Is(CashoutStates.None),
+            resettleState: Arg.Is(ResettleStates.None),
+            externalRoundId: Arg.Is(command.Record.ExternalRoundId),
+            externalWagerId: Arg.Is(command.Record.ExternalRoundId),
+            externalGameId: Arg.Is(command.Record.ExternalGameId.ToString()),
             externalCreatedOn: Arg.Is(command.Record.ExternalCreatedOn.ToDateTimeOffset()),
             externalClosedOn: Arg.Is(command.Record.ExternalClosedOn.ToDateTimeOffset()),
+            externalPayoffOn: Arg.Is(command.Record.ExternalClosedOn.ToDateTimeOffset()),
+            externalResettleOn: Arg.Is(DateTimeOffset.UnixEpoch),
             bet: Arg.Is(7.50m),
             validBet: Arg.Is(7.50m),
             settle: Arg.Is(0.0m),
             commission: Arg.Is(0.0m),
             turnover: Arg.Is(7.50m),
-            playerWinLoss: Arg.Is(-7.50m),
+            winLoss: Arg.Is(-7.50m),
             additionalData: Arg.Is(command.Record.AdditionalData),
-            cancellationToken: Arg.Any<CancellationToken>())
-            .ConfigureAwait(false);
+            cancellationToken: Arg.Any<CancellationToken>());
     }
 
     [Fact]
@@ -109,30 +112,33 @@ public class HandleRecordCommandServiceUnitTest
             gameRecordInfo,
             fakeClient);
 
-        await service
-            .ExecuteAsync(
-            command)
-            .ConfigureAwait(false);
+        await service.ExecuteAsync(command);
 
         await fakeClient
             .Received(1)
             .MessageAsync(
             gameProviderCode: Arg.Is(gameRecordInfo.Value.GameProviderCode),
-            externalRoundId: Arg.Is(command.Record.ExternalRoundId),
-            externalGameId: Arg.Is(command.Record.ExternalGameId.ToString()),
             playerCode: Arg.Is(command.Record.PlayerCode),
-            status: Arg.Is(GameRecordStatus.Closed),
-            clientStatus: Arg.Is(GameRecordClientStatus.Win),
+            wagerState: Arg.Is(WagerStates.Win),
+            wagerType: Arg.Is(WagerTypes.Normal),
+            freeGameState: Arg.Is(FreeGameStates.None),
+            gambleState: Arg.Is(GambleStates.None),
+            cashoutState: Arg.Is(CashoutStates.None),
+            resettleState: Arg.Is(ResettleStates.None),
+            externalRoundId: Arg.Is(command.Record.ExternalRoundId),
+            externalWagerId: Arg.Is(command.Record.ExternalRoundId),
+            externalGameId: Arg.Is(command.Record.ExternalGameId.ToString()),
             externalCreatedOn: Arg.Is(command.Record.ExternalCreatedOn.ToDateTimeOffset()),
             externalClosedOn: Arg.Is(command.Record.ExternalClosedOn.ToDateTimeOffset()),
+            externalPayoffOn: Arg.Is(command.Record.ExternalClosedOn.ToDateTimeOffset()),
+            externalResettleOn: Arg.Is(DateTimeOffset.UnixEpoch),
             bet: Arg.Is(16.5m),
             validBet: Arg.Is(16.5m),
             settle: Arg.Is(32.18m),
             commission: Arg.Is(0.0m),
             turnover: Arg.Is(16.5m),
-            playerWinLoss: Arg.Is(15.68m),
+            winLoss: Arg.Is(15.68m),
             additionalData: Arg.Is(command.Record.AdditionalData),
-            cancellationToken: Arg.Any<CancellationToken>())
-            .ConfigureAwait(false);
+            cancellationToken: Arg.Any<CancellationToken>());
     }
 }

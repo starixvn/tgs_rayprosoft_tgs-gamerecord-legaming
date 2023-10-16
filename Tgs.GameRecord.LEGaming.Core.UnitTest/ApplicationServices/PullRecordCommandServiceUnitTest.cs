@@ -29,7 +29,7 @@ public class PullRecordCommandServiceUnitTest
             EndTime: DateTimeOffset.UtcNow);
 
         _ = fakeClient
-            .GameRecordAsync(
+            .GameWagerAsync(
             apiUrl: Arg.Is(command.ApiUrl),
             deskey: Arg.Is(command.Deskey),
             md5key: Arg.Is(command.Md5key),
@@ -37,7 +37,7 @@ public class PullRecordCommandServiceUnitTest
             startTime: Arg.Is(command.StartTime),
             endTime: Arg.Is(command.EndTime),
             cancellationToken: Arg.Any<CancellationToken>())
-            .Returns(Enumerable.Empty<GameRecordInfo>().ToAsyncEnumerable());
+            .Returns(Enumerable.Empty<GameWagerInfo>().ToAsyncEnumerable());
 
         var service = new PullRecordCommandService(
             fakeLogger,

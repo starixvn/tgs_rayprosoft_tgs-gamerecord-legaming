@@ -5,25 +5,14 @@ using Tgs.ServiceUtility;
 
 namespace Tgs.GameRecord.LEGaming.Core.ApplicationServices;
 
-internal class PullRecordCommandService : ICommandService<PullRecordCommand>
+internal class PullRecordCommandService(
+    ILogger<PullRecordCommandService> logger,
+    IGameInterfaceLEGamingClient client,
+    ICommandService<HandleRecordCommand> service) : ICommandService<PullRecordCommand>
 {
-    private readonly IGameInterfaceLEGamingClient _client;
-    private readonly ILogger<PullRecordCommandService> _logger;
-    private readonly ICommandService<HandleRecordCommand> _service;
-
-    public PullRecordCommandService(
-        ILogger<PullRecordCommandService> logger,
-        IGameInterfaceLEGamingClient client,
-        ICommandService<HandleRecordCommand> service)
-    {
-        _logger = logger ?? throw new ArgumentNullException(nameof(logger));
-        _client = client ?? throw new ArgumentNullException(nameof(client));
-        _service = service ?? throw new ArgumentNullException(nameof(service));
-    }
-
     public async ValueTask ExecuteAsync(PullRecordCommand command, CancellationToken cancellationToken = default)
     {
-        var infos = await _client
+        var infos = await client
             .GameWagerAsync(
             apiUrl: command.ApiUrl,
             deskey: command.Deskey,
@@ -41,7 +30,7 @@ internal class PullRecordCommandService : ICommandService<PullRecordCommand>
         {
             try
             {
-                await _service
+                await service
                     .ExecuteAsync(
                     command: new HandleRecordCommand(info),
                     cancellationToken: cancellationToken)
@@ -49,7 +38,7 @@ internal class PullRecordCommandService : ICommandService<PullRecordCommand>
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "LogOn:{logOn} Message: game record exception.({info})", DateTime.Now.ToString("o"), info);
+                logger.LogError(ex, "LogOn:{logOn} Message: game record exception.({info})", DateTime.Now.ToString("o"), info);
             }
         }
     }

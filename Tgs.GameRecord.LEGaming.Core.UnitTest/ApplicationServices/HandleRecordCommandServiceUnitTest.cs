@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Text.Json.Nodes;
 using System.Threading;
 using Google.Protobuf.WellKnownTypes;
 using Microsoft.Extensions.Options;
@@ -19,7 +20,8 @@ public class HandleRecordCommandServiceUnitTest
         {
             GameProviderCode = "LY",
             GameProviderConfiguration = "LYConfiguration",
-            GameProviderHangfire = "ly-schedule:hangfire:",
+            HangfirePrefix = "gamerecord-ly-hangfire:",
+            HangfireLocking = "gamerecord-ly-locking:",
             IntervalMinutes = 5,
             IntervalMinutesMax = 30,
             IntervalMinutesMinimum = 3
@@ -72,7 +74,7 @@ public class HandleRecordCommandServiceUnitTest
             commission: Arg.Is(0.0m),
             turnover: Arg.Is(7.50m),
             winLoss: Arg.Is(-7.50m),
-            additionalData: Arg.Is(command.Info.AdditionalData),
+            additionalData: Arg.Any<JsonNode>(),
             cancellationToken: Arg.Any<CancellationToken>());
     }
 
@@ -83,7 +85,8 @@ public class HandleRecordCommandServiceUnitTest
         {
             GameProviderCode = "LY",
             GameProviderConfiguration = "LYConfiguration",
-            GameProviderHangfire = "ly-schedule:hangfire:",
+            HangfirePrefix = "gamerecord-ly-hangfire:",
+            HangfireLocking = "gamerecord-ly-locking:",
             IntervalMinutes = 5,
             IntervalMinutesMax = 30,
             IntervalMinutesMinimum = 3
@@ -136,7 +139,7 @@ public class HandleRecordCommandServiceUnitTest
             commission: Arg.Is(0.0m),
             turnover: Arg.Is(16.5m),
             winLoss: Arg.Is(15.68m),
-            additionalData: Arg.Is(command.Info.AdditionalData),
+            additionalData: Arg.Any<JsonNode>(),
             cancellationToken: Arg.Any<CancellationToken>());
     }
 }

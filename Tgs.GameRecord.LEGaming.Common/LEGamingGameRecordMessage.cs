@@ -1,6 +1,6 @@
 ﻿namespace Tgs.GameRecord.LEGaming.Common;
 
-public record GameRecordMessage
+public record LEGamingGameRecordMessage
 {
     public Uri ApiUrl { get; init; } = default!;
     public string Deskey { get; init; } = default!;

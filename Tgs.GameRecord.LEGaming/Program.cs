@@ -7,6 +7,7 @@ using OpenTelemetry.Metrics;
 using OpenTelemetry.Resources;
 using OpenTelemetry.Trace;
 using Tgs.GameRecord.LEGaming;
+using Tgs.GameRecord.LEGaming.Common;
 using Tgs.GameRecord.LEGaming.Core;
 using Tgs.GameRecord.LEGaming.Messages;
 
@@ -101,8 +102,8 @@ builder.Services
             var configuration = sp.GetRequiredService<IConfiguration>();
             options.Url = configuration.GetConnectionString("Nats")!;
         })
-        .AddHandler<GameRecordMessageHandler>("gp.gamerecord.schedule.ly", "gp.gamerecord.schedule.ly")
-        .AddHandler<GameRecordMessageHandler>("gp.gamerecord.manual.ly", "gp.gamerecord.manual.ly");
+        .AddHandler<GameRecordMessageHandler>(LEGamingNatsConst.SchedulePublish, LEGamingNatsConst.SchedulePublish)
+        .AddHandler<GameRecordMessageHandler>(LEGamingNatsConst.ManualPublish, LEGamingNatsConst.ManualPublish);
     })
     .ClearAllExchanges()
     .AddNatsGlobPatternExchange("*");

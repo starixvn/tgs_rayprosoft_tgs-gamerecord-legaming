@@ -23,6 +23,7 @@ public static class ServiceCollectionExtensions
 		.AddSingleton<RedisConnectionManager>()
 		.AddGameRecordCore(
 			gameCommandClientOptions,
-			gameInterfaceGKXGamingClientOptions,
+			gameInterfaceGKXGamingClientOptions)
+		.AddGameRecordRepository(
 			redisDatabaseResolver: (sp) => sp.GetRequiredService<RedisConnectionManager>().Database);
 }

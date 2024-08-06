@@ -5,7 +5,6 @@ using Google.Protobuf.WellKnownTypes;
 using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Extensions.Options;
 using NSubstitute;
-using Tgs.GameInterface.LEGaming.Protos;
 using Tgs.GameRecord.LEGaming.Core.ApplicationServices;
 using Valhalla.MessageQueue;
 
@@ -30,11 +29,11 @@ public class HandleRecordCommandServiceUnitTest
 		var fakeMessageSender = Substitute.For<IMessageSender>();
 
 		var command = new HandleRecordCommand(
-			Info: new GameWagerInfo
+			Info: new GameInterface.LEGaming.Protos.GameRecordInfo
 			{
-				ExternalWagerId = "888-1692114604-19026124-1",
-				ExternalGameId = "740",
 				PlayerCode = "4ukkm20cwny2",
+				ExternalBetId = "888-1692114604-19026124-1",
+				ExternalGameId = "740",
 				ExternalCreatedOn = DateTimeOffset.Parse("2023-08-15T23:50:04+08:00").ToTimestamp(),
 				ExternalClosedOn = DateTimeOffset.Parse("2023-08-15T23:50:52+08:00").ToTimestamp(),
 				Bet = 7.50m,
@@ -60,8 +59,8 @@ public class HandleRecordCommandServiceUnitTest
 			{
 				GameProviderCode = gameRecordInfo.Value.GameProviderCode,
 				PlayerCode = command.Info.PlayerCode,
-				ExternalRoundId = command.Info.ExternalWagerId,
-				ExternalBetId = command.Info.ExternalWagerId,
+				ExternalRoundId = command.Info.ExternalBetId,
+				ExternalBetId = command.Info.ExternalBetId,
 				ExternalGameId = command.Info.ExternalGameId,
 				ExternalCreatedOn = command.Info.ExternalCreatedOn,
 				ExternalClosedOn = command.Info.ExternalClosedOn,
@@ -103,11 +102,11 @@ public class HandleRecordCommandServiceUnitTest
 		var fakeMessageSender = Substitute.For<IMessageSender>();
 
 		var command = new HandleRecordCommand(
-			Info: new GameWagerInfo
+			Info: new GameInterface.LEGaming.Protos.GameRecordInfo
 			{
-				ExternalWagerId = "888-1692113797-19006265-2",
-				ExternalGameId = "740",
 				PlayerCode = "4ukkm20cwny2",
+				ExternalBetId = "888-1692113797-19006265-2",
+				ExternalGameId = "740",
 				ExternalCreatedOn = DateTimeOffset.Parse("2023-08-15T23:36:37+08:00").ToTimestamp(),
 				ExternalClosedOn = DateTimeOffset.Parse("2023-08-15T23:37:30+08:00").ToTimestamp(),
 				Bet = 16.5m,
@@ -133,8 +132,8 @@ public class HandleRecordCommandServiceUnitTest
 			{
 				GameProviderCode = gameRecordInfo.Value.GameProviderCode,
 				PlayerCode = command.Info.PlayerCode,
-				ExternalRoundId = command.Info.ExternalWagerId,
-				ExternalBetId = command.Info.ExternalWagerId,
+				ExternalRoundId = command.Info.ExternalBetId,
+				ExternalBetId = command.Info.ExternalBetId,
 				ExternalGameId = command.Info.ExternalGameId,
 				ExternalCreatedOn = command.Info.ExternalCreatedOn,
 				ExternalClosedOn = command.Info.ExternalClosedOn,

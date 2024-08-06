@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Logging.Abstractions;
 using NSubstitute;
 using Tgs.GameInterface.LEGaming.Client;
-using Tgs.GameInterface.LEGaming.Protos;
 using Tgs.GameRecord.LEGaming.Core.ApplicationServices;
 using Tgs.ServiceUtility;
 
@@ -28,8 +27,7 @@ public class PullRecordCommandServiceUnitTest
 			StartTime: DateTimeOffset.UtcNow.AddMinutes(-10),
 			EndTime: DateTimeOffset.UtcNow);
 
-		_ = fakeClient
-			.GameWagerAsync(
+		_ = fakeClient.GameRecordAsync(
 			apiUrl: Arg.Is(command.ApiUrl),
 			deskey: Arg.Is(command.Deskey),
 			md5key: Arg.Is(command.Md5key),
@@ -37,7 +35,7 @@ public class PullRecordCommandServiceUnitTest
 			startTime: Arg.Is(command.StartTime),
 			endTime: Arg.Is(command.EndTime),
 			cancellationToken: Arg.Any<CancellationToken>())
-			.Returns(Enumerable.Empty<GameWagerInfo>().ToAsyncEnumerable());
+			.Returns(Enumerable.Empty<GameInterface.LEGaming.Protos.GameRecordInfo>().ToAsyncEnumerable());
 
 		var service = new PullRecordCommandService(
 			fakeLogger,

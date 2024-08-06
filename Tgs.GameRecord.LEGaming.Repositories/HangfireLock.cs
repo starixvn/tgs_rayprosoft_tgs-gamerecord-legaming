@@ -1,8 +1,9 @@
 ﻿using System.Text.Json.Nodes;
 using Microsoft.Extensions.Options;
 using StackExchange.Redis;
+using Tgs.GameRecord.LEGaming.Core;
 
-namespace Tgs.GameRecord.LEGaming.Core;
+namespace Tgs.GameRecord.LEGaming.Repositories;
 
 internal class HangfireLock(
 	IOptions<GameRecordInfoOptions> options,

@@ -1,6 +1,5 @@
 ﻿using Microsoft.Extensions.Logging;
 using Tgs.GameInterface.LEGaming.Client;
-using Tgs.GameInterface.LEGaming.Protos;
 using Tgs.ServiceUtility;
 
 namespace Tgs.GameRecord.LEGaming.Core.ApplicationServices;
@@ -12,8 +11,7 @@ internal class PullRecordCommandService(
 {
 	public async ValueTask ExecuteAsync(PullRecordCommand command, CancellationToken cancellationToken = default)
 	{
-		var infos = await client
-			.GameWagerAsync(
+		var infos = await client.GameRecordAsync(
 			apiUrl: command.ApiUrl,
 			deskey: command.Deskey,
 			md5key: command.Md5key,
@@ -24,7 +22,7 @@ internal class PullRecordCommandService(
 			.ToArrayAsync(
 			cancellationToken: cancellationToken)
 			.ConfigureAwait(false)
-			?? Enumerable.Empty<GameWagerInfo>();
+			?? Enumerable.Empty<GameInterface.LEGaming.Protos.GameRecordInfo>();
 
 		foreach (var info in infos)
 		{

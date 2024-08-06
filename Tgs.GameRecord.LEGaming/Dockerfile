@@ -13,7 +13,8 @@ COPY ["nuget.config", "."]
 COPY ["Tgs.GameRecord.LEGaming/Tgs.GameRecord.LEGaming.csproj", "Tgs.GameRecord.LEGaming/"]
 COPY ["Tgs.GameRecord.LEGaming.Core/Tgs.GameRecord.LEGaming.Core.csproj", "Tgs.GameRecord.LEGaming.Core/"]
 COPY ["Tgs.GameRecord.LEGaming.Common/Tgs.GameRecord.LEGaming.Common.csproj", "Tgs.GameRecord.LEGaming.Common/"]
-RUN dotnet restore "./Tgs.GameRecord.LEGaming/./Tgs.GameRecord.LEGaming.csproj"
+COPY ["Tgs.GameRecord.LEGaming.Repositories/Tgs.GameRecord.LEGaming.Repositories.csproj", "Tgs.GameRecord.LEGaming.Repositories/"]
+RUN dotnet restore "./Tgs.GameRecord.LEGaming/Tgs.GameRecord.LEGaming.csproj"
 COPY . .
 WORKDIR "/src/Tgs.GameRecord.LEGaming"
 RUN dotnet build "./Tgs.GameRecord.LEGaming.csproj" -c $BUILD_CONFIGURATION -o /app/build

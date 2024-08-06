@@ -21,8 +21,8 @@ internal class HandleRecordCommandService(
 		{
 			GameProviderCode = _gameRecordInfo.GameProviderCode,
 			PlayerCode = command.Info.PlayerCode,
-			ExternalRoundId = command.Info.ExternalWagerId,
-			ExternalBetId = command.Info.ExternalWagerId,
+			ExternalRoundId = command.Info.ExternalBetId,
+			ExternalBetId = command.Info.ExternalBetId,
 			ExternalGameId = command.Info.ExternalGameId,
 			ExternalCreatedOn = command.Info.ExternalCreatedOn,
 			ExternalClosedOn = command.Info.ExternalClosedOn,

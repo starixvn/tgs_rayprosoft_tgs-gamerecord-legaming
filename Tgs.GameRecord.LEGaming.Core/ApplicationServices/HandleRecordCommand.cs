@@ -1,5 +1,3 @@
-﻿using Tgs.GameInterface.LEGaming.Protos;
+﻿namespace Tgs.GameRecord.LEGaming.Core.ApplicationServices;
 
-namespace Tgs.GameRecord.LEGaming.Core.ApplicationServices;
-
-public record HandleRecordCommand(GameWagerInfo Info);
+public record HandleRecordCommand(GameInterface.LEGaming.Protos.GameRecordInfo Info);

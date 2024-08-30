@@ -22,7 +22,7 @@ public class LEGamingController : ControllerBase
 		LEGamingGameRecordMessage source)
 		=> messageSender.PublishAsync(
 			subject: LEGamingNatsConst.ManualPublish,
-			data: Encoding.UTF8.GetBytes(JsonSerializer.Serialize(source)),
+			data: JsonSerializer.SerializeToUtf8Bytes(source),
 			cancellationToken: HttpContext.RequestAborted);
 
 	/// <summary>
@@ -37,6 +37,6 @@ public class LEGamingController : ControllerBase
 		LEGamingGameRecordMessage source)
 		=> messageSender.PublishAsync(
 			subject: LEGamingNatsConst.SchedulePublish,
-			data: Encoding.UTF8.GetBytes(JsonSerializer.Serialize(source)),
+			data: JsonSerializer.SerializeToUtf8Bytes(source),
 			cancellationToken: HttpContext.RequestAborted);
 }
